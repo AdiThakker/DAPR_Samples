@@ -19,9 +19,9 @@ namespace PubSub.API.Controllers
         public IdGenerationController(ILogger<IdGenerationController> logger) => _logger = logger;
 
         [HttpPost]
-        [Route("api/order")]
+        [Route("api/idgenerator/{nodeId}")]
 
-        public async Task<IActionResult> RequestUniqueId([FromBody] int nodeId)
+        public async Task<IActionResult> RequestUniqueId(int nodeId)
         {
             _logger.LogInformation($"Request to get unique Id for node {nodeId} received.");
 
