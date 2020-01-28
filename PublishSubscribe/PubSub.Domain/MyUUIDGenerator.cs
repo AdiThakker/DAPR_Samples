@@ -1,10 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Threading.Tasks;
 
 namespace PubSub.Domain
 {
-    class MyUUIDGenerator
+    public class MyUUIDGenerator
     {
+        public object JsonConvert { get; private set; }
+
+        public async Task<int> GenerateUniqueId(int nodeId)
+        {
+            //TODO logic to generate Unique Id based on Node
+            return await Task.FromResult(1);
+
+        }
     }
 }

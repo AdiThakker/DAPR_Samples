@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PubSub.Domain.Entities
+﻿namespace PubSub.Domain.Entities
 {
-    class MyUUID
+    public class MyUUID
     {
+
+        public int nodeId { get; set; }
     }
 }
