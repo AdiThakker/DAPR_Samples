@@ -6,4 +6,8 @@
     <RootNamespace>IDGeneration.Application</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\IDGeneration.Common\IDGeneration.Common.csproj" />
+  </ItemGroup>
+
 </Project>
