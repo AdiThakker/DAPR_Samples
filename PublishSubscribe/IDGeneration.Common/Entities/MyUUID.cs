@@ -1,4 +1,4 @@
-﻿namespace PubSub.Domain.Entities
+﻿namespace IDGeneration.Common.Entities
 {
     public class MyUUID
     {

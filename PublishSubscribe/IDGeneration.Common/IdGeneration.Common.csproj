@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyName>DAPR_Samples.PubSub.Domain</AssemblyName>
+    <AssemblyName>DAPR_Samples.IDGeneration.Common</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

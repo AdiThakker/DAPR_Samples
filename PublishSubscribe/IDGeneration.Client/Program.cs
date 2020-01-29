@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
-using PubSub.Domain.Entities;
+﻿using IDGeneration.Common.Entities;
+using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Text;
 
-namespace PubSub.ConsoleTest
+namespace IDGeneration.Client
 {
     class Program
     {

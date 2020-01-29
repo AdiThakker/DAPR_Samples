@@ -1,14 +1,10 @@
 ﻿using Dapr;
+using IDGeneration.Common.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using PubSub.Domain;
-using PubSub.Domain.Entities;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace PubSub.API.Controllers
+namespace IDGeneration.Service.Controllers
 {
 
     [ApiController]

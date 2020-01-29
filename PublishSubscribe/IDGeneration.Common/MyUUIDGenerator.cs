@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace PubSub.Domain
+namespace IDGeneration.Common
 {
     public class MyUUIDGenerator
     {
