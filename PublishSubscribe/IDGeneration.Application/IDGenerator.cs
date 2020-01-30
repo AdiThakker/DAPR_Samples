@@ -1,4 +1,4 @@
-﻿using IDGeneration.Common.Entities;
+﻿using IDGeneration.Common.Interfaces;
 using System.Collections.Concurrent;
 
 namespace IDGeneration.Application
@@ -7,12 +7,21 @@ namespace IDGeneration.Application
     {
         private static readonly ConcurrentDictionary<string, IDGenerator> _namedgenerators = new ConcurrentDictionary<string, IDGenerator>();
 
-        public IDGenerator(IDGenerationStrategy idGenerationStrategy)
+        public IIDGenerationStrategy IDGenerationStrategy { get; }
+
+        public IDGenerator(int nodeId)
+        {
+            this.IDGenerationStrategy = new FlakeIDGenerationStrategy(nodeId);
+        }
+
+        public IDGenerator(IIDGenerationStrategy idGenerationStrategy)
         {
             if (idGenerationStrategy is null)
             {
                 throw new System.ArgumentNullException(nameof(idGenerationStrategy));
             }
         }
+
+        public long GenerateId() => this.IDGenerationStrategy.GenerateId();
     }
 }

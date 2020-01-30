@@ -1,39 +1,37 @@
 ﻿using IDGeneration.Common.Exceptions;
+using IDGeneration.Common.Interfaces;
 using System;
 
 namespace IDGeneration.Application
 {
-    public class IDGenerationStrategy
+    public class FlakeIDGenerationStrategy : IIDGenerationStrategy
     {
         private readonly long _sequenceMask;
-        private readonly long _nodeMask;
-        private readonly long _idGeneratorMask;
+        private readonly long _groupMask;
+        private readonly long _timeMask;
         private readonly object _syncObject = new object();
 
         private int _lastSequence = 0;
         private long _lastTime = -1;
 
 
-        public byte TimeStampBits { get; }
+        public byte TimeStampBits { get => 42; }
 
-        public byte NodeIdBits { get; }
+        public byte GroupIdBits { get => 11; }
 
-        public byte SequenceBits { get; }
+        public byte SequenceBits { get => 10; }
 
         public int NodeId { get; }
 
-        public int TotalBits { get { return TimeStampBits + NodeIdBits + SequenceBits; } }
+        public int TotalBits { get { return TimeStampBits + GroupIdBits + SequenceBits; } }
 
-        public IDGenerationStrategy(byte timestampBits, byte nodeIdBits, byte sequenceBits, int nodeId)
+        public FlakeIDGenerationStrategy(int nodeId)
         {
-            // TODO Validation
-            TimeStampBits = timestampBits;
-            NodeIdBits = nodeIdBits;
-            SequenceBits = sequenceBits;
+
             NodeId = nodeId;
 
-            _idGeneratorMask = GetMask(TimeStampBits);
-            _nodeMask = GetMask(NodeIdBits);
+            _timeMask = GetMask(TimeStampBits);
+            _groupMask = GetMask(GroupIdBits);
             _sequenceMask = GetMask(SequenceBits);
         }
 
@@ -45,7 +43,7 @@ namespace IDGeneration.Application
             {
                 //TODO Configure timesource
                 var ticks = DateTime.UtcNow.Ticks;
-                var timestamp = ticks & _idGeneratorMask;
+                var timestamp = ticks & _timeMask;
 
                 if (timestamp < _lastTime)
                     throw new InvalidSystemClockException($"Invalid Clock tick.");
@@ -63,7 +61,7 @@ namespace IDGeneration.Application
                     _lastTime = timestamp;
                 }
 
-                return (timestamp << (this.NodeIdBits + this.SequenceBits)) + (this.NodeId << this.SequenceBits) + _lastSequence;
+                return (timestamp << (this.GroupIdBits + this.SequenceBits)) + (this.NodeId << this.SequenceBits) + _lastSequence;
 
             }
         }
