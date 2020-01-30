@@ -27,12 +27,15 @@ namespace IDGeneration.Application
 
         public FlakeIDGenerationStrategy(int nodeId)
         {
-
-            NodeId = nodeId;
-
             _timeMask = GetMask(TimeStampBits);
             _groupMask = GetMask(GroupIdBits);
             _sequenceMask = GetMask(SequenceBits);
+
+            if (nodeId > _groupMask)
+                throw new InvalidOperationException($"Invalid nodeId. Cannot exceed {_groupMask}");
+
+            NodeId = nodeId;
+            
         }
 
         private static long GetMask(byte bits) => (1L << bits) - 1;

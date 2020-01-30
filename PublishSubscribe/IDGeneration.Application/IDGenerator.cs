@@ -1,11 +1,10 @@
 ﻿using IDGeneration.Common.Interfaces;
-using System.Collections.Concurrent;
 
 namespace IDGeneration.Application
 {
     public class IDGenerator
     {
-        private static readonly ConcurrentDictionary<string, IDGenerator> _namedgenerators = new ConcurrentDictionary<string, IDGenerator>();
+        // private static readonly ConcurrentDictionary<string, IDGenerator> _namedgenerators = new ConcurrentDictionary<string, IDGenerator>();
 
         public IIDGenerationStrategy IDGenerationStrategy { get; }
 
@@ -24,4 +23,4 @@ namespace IDGeneration.Application
 
         public long GenerateId() => this.IDGenerationStrategy.GenerateId();
     }
-}
+}   
