@@ -12,7 +12,7 @@ namespace IDGeneration.Application
 
         private int _lastSequence = 0;
         private long _lastTime = -1;
-       
+
 
         public byte TimeStampBits { get; }
 
@@ -20,15 +20,18 @@ namespace IDGeneration.Application
 
         public byte SequenceBits { get; }
 
+        public int NodeId { get; }
+
         public int TotalBits { get { return TimeStampBits + NodeIdBits + SequenceBits; } }
 
-        public IDGenerationStrategy(byte timestampBits, byte nodeIdBits, byte sequenceBits, int nodeId, )
+        public IDGenerationStrategy(byte timestampBits, byte nodeIdBits, byte sequenceBits, int nodeId)
         {
             // TODO Validation
             TimeStampBits = timestampBits;
             NodeIdBits = nodeIdBits;
             SequenceBits = sequenceBits;
-           
+            NodeId = nodeId;
+
             _idGeneratorMask = GetMask(TimeStampBits);
             _nodeMask = GetMask(NodeIdBits);
             _sequenceMask = GetMask(SequenceBits);
@@ -60,7 +63,7 @@ namespace IDGeneration.Application
                     _lastTime = timestamp;
                 }
 
-                return (timestamp << (this.NodeIdBits + this.SequenceBits)) + (_nodeBitsShift) + _lastSequence;
+                return (timestamp << (this.NodeIdBits + this.SequenceBits)) + (this.NodeId << this.SequenceBits) + _lastSequence;
 
             }
         }
