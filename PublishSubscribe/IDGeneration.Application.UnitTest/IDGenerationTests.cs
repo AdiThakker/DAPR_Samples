@@ -1,3 +1,4 @@
+using IDGeneration.Common.Exceptions;
 using IDGeneration.Common.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -46,6 +47,32 @@ namespace IDGeneration.Application.UnitTest
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InvalidSystemClockException))]
+        public void Verify_GenerateId_Throws_Exception_When_Clock_Moves_Back()
+        {
+            var timestamp = 1000L;
+            var idGenerationStrategy = new FlakeIDGenerationStrategy(100, () => timestamp);
+            var idGenerator = new IDGenerator(100, idGenerationStrategy);
+            idGenerator.GenerateId();
+            timestamp = 999L;
+            idGenerator.GenerateId();
+            Assert.IsTrue(true);
+
+        }
+
+        [TestMethod]
+        public void Verify_GenerateIds_Increase_In_Sequence()
+        {
+            var timestamp = 1000L;
+            var idGenerationStrategy = new FlakeIDGenerationStrategy(100, () => timestamp);
+            var idGenerator = new IDGenerator(100, idGenerationStrategy);
+            var id1 = idGenerator.GenerateId();
+            timestamp = 1001L;
+            var id2 = idGenerator.GenerateId();
+            Assert.IsTrue(id2 > id1);
+        }
+
+        [TestMethod]
         public void Verify_IDGenerationStrategy_Default_IsFlakeIDGeneration()
         {
             Assert.IsInstanceOfType(new IDGenerator(100).IDGenerationStrategy, typeof(FlakeIDGenerationStrategy));
@@ -63,9 +90,6 @@ namespace IDGeneration.Application.UnitTest
 
     internal class CustomIDGenerationStrategy : IIDGenerationStrategy
     {
-        public long GenerateId()
-        {
-            return 100L;
-        }
+        public long GenerateId() => 100L;
     }
 }
