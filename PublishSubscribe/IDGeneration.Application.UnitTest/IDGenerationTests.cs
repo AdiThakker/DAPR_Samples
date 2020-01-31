@@ -54,11 +54,18 @@ namespace IDGeneration.Application.UnitTest
         [TestMethod]
         public void Verify_IDGeneration_Is_Not_Null_When_Using_CustomIDGenerator()
         {
-            Func<IIDGenerationStrategy> idGeneration = new Func<IIDGenerationStrategy>(() => )
-            Assert.IsInstanceOfType(new IDGenerator(100, ).IDGenerationStrategy, typeof(FlakeIDGenerationStrategy));
+            var customIdGeneration = new CustomIDGenerationStrategy();
+            Assert.IsInstanceOfType(new IDGenerator(100, customIdGeneration).IDGenerationStrategy, typeof(CustomIDGenerationStrategy));
+            Assert.IsTrue(customIdGeneration.GenerateId() == 100L);
         }
 
+    }
 
-
+    internal class CustomIDGenerationStrategy : IIDGenerationStrategy
+    {
+        public long GenerateId()
+        {
+            return 100L;
+        }
     }
 }
