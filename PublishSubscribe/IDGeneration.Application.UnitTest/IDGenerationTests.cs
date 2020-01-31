@@ -43,7 +43,7 @@ namespace IDGeneration.Application.UnitTest
         [TestMethod]
         public void Verify_IDGenerationStrategy_Is_Not_Null()
         {
-            Assert.IsNotNull(new IDGenerator(100).IDGenerationStrategy);
+            Assert.IsNotNull(new IDGenerator<long>(100, new FlakeIDGenerationStrategy(1)).IDGenerationStrategy);
         }
 
         [TestMethod]
@@ -52,7 +52,7 @@ namespace IDGeneration.Application.UnitTest
         {
             var timestamp = DateTime.UtcNow.Ticks;
             var idGenerationStrategy = new FlakeIDGenerationStrategy(100, () => timestamp);
-            var idGenerator = new IDGenerator(100, idGenerationStrategy);
+            var idGenerator = new IDGenerator<long>(100, idGenerationStrategy);
             idGenerator.GenerateId();
             timestamp = new DateTime(timestamp).AddMilliseconds(-1).Ticks;
             idGenerator.GenerateId();
@@ -65,7 +65,7 @@ namespace IDGeneration.Application.UnitTest
         {
             var timestamp = DateTime.UtcNow.Ticks;
             var idGenerationStrategy = new FlakeIDGenerationStrategy(100, () => timestamp);
-            var idGenerator = new IDGenerator(100, idGenerationStrategy);
+            var idGenerator = new IDGenerator<long>(100, idGenerationStrategy);
             var id1 = idGenerator.GenerateId();
             timestamp = new DateTime(timestamp).AddMilliseconds(1).Ticks;
             var id2 = idGenerator.GenerateId();
@@ -73,23 +73,28 @@ namespace IDGeneration.Application.UnitTest
         }
 
         [TestMethod]
-        public void Verify_IDGenerationStrategy_Default_IsFlakeIDGeneration()
+        public void Verify_GenerateIds_Increase_In_Sequence_When_TimeStamp_Same()
         {
-            Assert.IsInstanceOfType(new IDGenerator(100).IDGenerationStrategy, typeof(FlakeIDGenerationStrategy));
+            var timestamp = DateTime.UtcNow.Ticks;
+            var idGenerationStrategy = new FlakeIDGenerationStrategy(100, () => timestamp);
+            var idGenerator = new IDGenerator<long>(100, idGenerationStrategy);
+            var id1 = idGenerator.GenerateId();
+            var id2 = idGenerator.GenerateId();
+            Assert.IsTrue(id2 > id1);
         }
 
         [TestMethod]
         public void Verify_IDGeneration_Is_Not_Null_When_Using_CustomIDGenerator()
         {
             var customIdGeneration = new CustomIDGenerationStrategy();
-            Assert.IsInstanceOfType(new IDGenerator(100, customIdGeneration).IDGenerationStrategy, typeof(CustomIDGenerationStrategy));
-            Assert.IsTrue(customIdGeneration.GenerateId() == 100L);
+            Assert.IsInstanceOfType(new IDGenerator<int>(100, customIdGeneration).IDGenerationStrategy, typeof(CustomIDGenerationStrategy));
+            Assert.IsTrue(customIdGeneration.GenerateId() == 100);
         }
 
     }
 
-    internal class CustomIDGenerationStrategy : IIDGenerationStrategy
+    internal class CustomIDGenerationStrategy : IIDGenerationStrategy<int>
     {
-        public long GenerateId() => 100L;
+        public int GenerateId() => 100;
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace IDGeneration.Common.Interfaces
 {
-    public interface IIDGenerationStrategy
+    public interface IIDGenerationStrategy<out TResult>
     {
-        long GenerateId();
+        TResult GenerateId();
     }
 }

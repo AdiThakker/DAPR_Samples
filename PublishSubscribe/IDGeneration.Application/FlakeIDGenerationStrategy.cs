@@ -4,7 +4,7 @@ using System;
 
 namespace IDGeneration.Application
 {
-    public class FlakeIDGenerationStrategy : IIDGenerationStrategy
+    public class FlakeIDGenerationStrategy : IIDGenerationStrategy<long>
     {
         private readonly long _sequenceMask;
         private readonly long _groupMask;
@@ -39,7 +39,7 @@ namespace IDGeneration.Application
 
             NodeId = nodeId;
 
-            GetTicks = TimeSourceGeneration ?? new Func<long>(() => DateTime.UtcNow.Subtract(DefaultEpoch).Ticks); 
+            GetTicks = TimeSourceGeneration ?? new Func<long>(() => DateTime.UtcNow.Subtract(DefaultEpoch).Ticks);
 
         }
 

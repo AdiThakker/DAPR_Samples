@@ -1,16 +1,15 @@
 ﻿using IDGeneration.Common.Interfaces;
+using System;
 
 namespace IDGeneration.Application
 {
-    public class IDGenerator
+    public class IDGenerator<TResult>
     {
 
-        public IIDGenerationStrategy IDGenerationStrategy { get; }
+        public IIDGenerationStrategy<TResult> IDGenerationStrategy { get; }
 
-        public IDGenerator(int nodeId) => this.IDGenerationStrategy = new FlakeIDGenerationStrategy(nodeId);
+        public IDGenerator(int nodeId, IIDGenerationStrategy<TResult> idGenerationStrategy) => this.IDGenerationStrategy = idGenerationStrategy ?? throw new System.ArgumentNullException(nameof(idGenerationStrategy));
 
-        public IDGenerator(int nodeId, IIDGenerationStrategy idGenerationStrategy) => this.IDGenerationStrategy = idGenerationStrategy ?? throw new System.ArgumentNullException(nameof(idGenerationStrategy));
-
-        public long GenerateId() => this.IDGenerationStrategy.GenerateId();
+        public TResult GenerateId() => this.IDGenerationStrategy.GenerateId();
     }
 }
