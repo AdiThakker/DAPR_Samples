@@ -1,3 +1,4 @@
+using IDGeneration.Common.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
@@ -26,7 +27,7 @@ namespace IDGeneration.Application.UnitTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void Verify_FlakeId_Generation_Throws_Invalid_Exception_For_Integer_Value_2048()
         {
-            FlakeIDGenerationStrategy idGeneration = new FlakeIDGenerationStrategy(2048);
+            new FlakeIDGenerationStrategy(2048);
             Assert.IsTrue(true);
         }
 
@@ -37,5 +38,27 @@ namespace IDGeneration.Application.UnitTest
             new FlakeIDGenerationStrategy(1);
             Assert.IsTrue(true);
         }
+
+        [TestMethod]
+        public void Verify_IDGenerationStrategy_Is_Not_Null()
+        {
+            Assert.IsNotNull(new IDGenerator(100).IDGenerationStrategy);
+        }
+
+        [TestMethod]
+        public void Verify_IDGenerationStrategy_Default_IsFlakeIDGeneration()
+        {
+            Assert.IsInstanceOfType(new IDGenerator(100).IDGenerationStrategy, typeof(FlakeIDGenerationStrategy));
+        }
+
+        [TestMethod]
+        public void Verify_IDGeneration_Is_Not_Null_When_Using_CustomIDGenerator()
+        {
+            Func<IIDGenerationStrategy> idGeneration = new Func<IIDGenerationStrategy>(() => )
+            Assert.IsInstanceOfType(new IDGenerator(100, ).IDGenerationStrategy, typeof(FlakeIDGenerationStrategy));
+        }
+
+
+
     }
 }

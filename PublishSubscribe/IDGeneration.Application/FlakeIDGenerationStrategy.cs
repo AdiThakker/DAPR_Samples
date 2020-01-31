@@ -10,6 +10,7 @@ namespace IDGeneration.Application
         private readonly long _groupMask;
         private readonly long _timeMask;
         private readonly object _syncObject = new object();
+        public readonly DateTime DefaultEpoch = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         private int _lastSequence = 0;
         private long _lastTime = -1;
@@ -23,18 +24,22 @@ namespace IDGeneration.Application
 
         public int NodeId { get; }
 
+        public Func<long> GetTicks { get; }
+
         public int TotalBits { get { return TimeStampBits + GroupIdBits + SequenceBits; } }
 
-        public FlakeIDGenerationStrategy(int nodeId)
+        public FlakeIDGenerationStrategy(int nodeId, Func<long> TimeSourceGeneration = null)
         {
             _timeMask = GetMask(TimeStampBits);
             _groupMask = GetMask(GroupIdBits);
             _sequenceMask = GetMask(SequenceBits);
 
-            if (nodeId > _groupMask || nodeId <= 0)
+            if (nodeId > _groupMask || nodeId < 1)
                 throw new InvalidOperationException($"Invalid nodeId. Cannot exceed {_groupMask}");
 
             NodeId = nodeId;
+
+            GetTicks = TimeSourceGeneration ?? new Func<long>(() => DateTime.UtcNow.Subtract(DefaultEpoch).Ticks); 
 
         }
 
@@ -44,8 +49,7 @@ namespace IDGeneration.Application
         {
             lock (_syncObject)
             {
-                //TODO Configure timesource
-                var ticks = DateTime.UtcNow.Ticks;
+                var ticks = GetTicks();
                 var timestamp = ticks & _timeMask;
 
                 if (timestamp < _lastTime)
