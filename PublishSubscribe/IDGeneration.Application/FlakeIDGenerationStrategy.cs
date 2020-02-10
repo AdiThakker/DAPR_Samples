@@ -58,13 +58,13 @@ namespace IDGeneration.Application
                 if (timestamp == _lastTime)
                 {
                     if (_lastSequence < _sequenceMask)
-                        _lastSequence++;
+                        ++_lastSequence;
                     else
                         throw new SequenceOverflowException("Sequence overflow.");
                 }
                 else
                 {
-                    _lastSequence = 0;
+                    ++_lastSequence;
                     _lastTime = timestamp;
                 }
 
@@ -72,5 +72,9 @@ namespace IDGeneration.Application
 
             }
         }
+
+        public int GetNodeFromId(long id) => Convert.ToInt32((id >> this.SequenceBits) & _groupMask);
+
+        public int GetSequenceFromId(long id) => Convert.ToInt32((id & _sequenceMask));
     }
 }

@@ -91,6 +91,33 @@ namespace IDGeneration.Application.UnitTest
             Assert.IsTrue(customIdGeneration.GenerateId() == 100);
         }
 
+        [TestMethod]
+        public void Verify_NodeId_From_Generated_Matches()
+        {
+            var timestamp = DateTime.UtcNow.Ticks;
+            var idGenerationStrategy = new FlakeIDGenerationStrategy(100, () => timestamp);
+            var idGenerator = new IDGenerator<long>(100, idGenerationStrategy);
+            var id = idGenerator.GenerateId();
+            Assert.IsTrue(idGenerationStrategy.GetNodeFromId(id).Equals(100));
+        }
+
+        [TestMethod]
+        public void Verify_Sequence_From_Generated_Matches()
+        {
+            var timestamp = DateTime.UtcNow.Ticks;
+            var idGenerationStrategy = new FlakeIDGenerationStrategy(100, () => timestamp);
+            var idGenerator = new IDGenerator<long>(100, idGenerationStrategy);
+            var id = idGenerator.GenerateId();
+            Assert.IsTrue(idGenerationStrategy.GetSequenceFromId(id).Equals(1));
+
+            for (int i = 0; i < 9; i++)
+            {
+                id = idGenerator.GenerateId();
+            }
+            Assert.IsTrue(idGenerationStrategy.GetSequenceFromId(id).Equals(10));
+
+        }
+
     }
 
     internal class CustomIDGenerationStrategy : IIDGenerationStrategy<int>
