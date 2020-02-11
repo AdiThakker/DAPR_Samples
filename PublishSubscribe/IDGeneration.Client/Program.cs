@@ -26,7 +26,8 @@ namespace IDGeneration.Client
             using (var httpClient = new HttpClient())
             {
                 // var result = httpClient.PostAsync($"{clientConfiguration.RequestUrl}", new StringContent(JsonConvert.SerializeObject(new IDGenerationRequest { NodeId = nodeId }), Encoding.UTF8, "application/json")).Result;
-                var result = httpClient.PostAsync($"http://localhost:3500/v1.0/publish/IdGeneration", new StringContent(JsonConvert.SerializeObject(new IDGenerationRequest { NodeId = 101 }), Encoding.UTF8, "application/json")).Result;
+                var content = new StringContent(JsonConvert.SerializeObject(new IDGenerationRequest { NodeId = 101 }), Encoding.UTF8, "application/json");
+                var result = httpClient.PostAsync($"http://localhost:3500/v1.0/publish/IdGeneration", content).Result;
                 Console.WriteLine($"Unique Id request for 101 published with status {result.StatusCode}!");
             }
 
