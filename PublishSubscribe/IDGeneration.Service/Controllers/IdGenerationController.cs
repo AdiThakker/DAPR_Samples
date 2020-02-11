@@ -14,9 +14,9 @@ namespace IDGeneration.Service.Controllers
 
         public IDGenerationController(ILogger<IDGenerationController> logger) => _logger = logger;
 
-        [Topic("IDGeneration")]  //TODO Should be unique
+        [Topic("IdGeneration")]  //TODO Should be unique
         [HttpPost]
-        [Route("IdTopic")]
+        [Route("IdGeneration")]
         public async Task<IActionResult> ProcessIdGenerationRequest([FromBody] IDGenerationRequest uId)
         {
             _logger.LogInformation($"Unique Id request for node Id {uId.NodeId} processed!");
